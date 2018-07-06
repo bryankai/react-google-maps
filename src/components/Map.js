@@ -5,7 +5,6 @@ import {
   GoogleMap,
   Marker,
  } from 'react-google-maps'
-import InfoBox from 'react-google-maps/lib/components/addons/InfoBox'
 
 
 
@@ -31,8 +30,22 @@ class Map extends Component {
     }
   }
 
+  componentDidMount() {
+    this.delayedShowMarker()
+  }
+
+  delayedShowMarker = () => {
+    setTimeout(() => {
+      this.setState({ isMarkerShown: true })
+    }, 2000)
+  }
+
+  handleMarkerClick = () => {
+    this.setState({ isMarkerShown: false })
+    this.delayedShowMarker()
+  }
+
   render() {
-    console.log(this.state.markers[0].position.lat)
     const GoogleMapExample = withGoogleMap(props => (
       <GoogleMap
         ref={props.onMapLoad}
@@ -50,12 +63,16 @@ class Map extends Component {
         ))}
       </GoogleMap>
    ))
+
+
    return (
       <div>
         <GoogleMapExample
           containerElement={ <div style={{ height: `500px`, width: '500px' }} /> }
           mapElement={ <div style={{ height: `100%` }} /> }
           markers={this.state.markers}
+          isMarkerShown={this.state.isMarkerShown}
+          onMarkerClick={this.handleMarkerClick}
         />
       </div>
    )
